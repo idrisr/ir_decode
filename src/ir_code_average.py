@@ -2,6 +2,8 @@
 
 import sys
 import os.path
+import pandas as pd
+import numpy as np
 
 def print_sysout(method):
     def printed(*args, **kw):
@@ -11,16 +13,23 @@ def print_sysout(method):
     return printed
 
 
-def get_data_files():
-    pass
+@print_sysout
+def read_data_file(file_name):
+    df = pd.read_csv(file_name, skipinitialspace = True)
+    v = df.values
 
+    # skip first off and last on pulse
+    v = v.flatten()[1:-1]
 
-def read_data_file():
-    pass
+    # reshape into a matrix
+    m = v.reshape(len(v) / 2, 2, order = 'C')
+    df = pd.DataFrame(m)
+    df.columns = ['on', 'off']
+    return df
 
-
-def parse_data_file():
-    pass
+def read_data_files(file_args):
+    dfs = [read_data_file(file_name) for file_name in file_args]
+    return dfs
 
 
 def average_ir_signal():
@@ -43,11 +52,12 @@ def get_args(file_args):
             print 'file does not exist: %s' % (file_name, )
         else:
             file_names.append(file_name)
-
     return file_names
 
 def main():
-    args = get_args(sys.argv[1:])
+    args = sys.argv[1:]
+    file_args = get_args(args)
+    read_data_files(file_args)
 
 if __name__ == '__main__':
     main()
