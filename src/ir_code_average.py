@@ -5,10 +5,15 @@ import os.path
 import pandas as pd
 import numpy as np
 
+global DEBUG
+DEBUG = False
+DEBUG = True
+
 def print_sysout(method):
     def printed(*args, **kw):
         result = method(*args, **kw)
-        print '%s' %  (result, )
+        if DEBUG:
+            print '%s' %  (result, )
         return result
     return printed
 
@@ -27,13 +32,17 @@ def read_data_file(file_name):
     df.columns = ['on', 'off']
     return df
 
+
 def read_data_files(file_args):
     dfs = [read_data_file(file_name) for file_name in file_args]
     return dfs
 
 
-def average_ir_signal():
-    pass
+@print_sysout
+def average_ir_signal(dfs):
+    dfc = pd.concat(dfs, axis=1)
+    df = dfc.groupby(level=0, axis=1).mean()
+    return df
 
 
 def normalize_ir_signal():
@@ -54,10 +63,13 @@ def get_args(file_args):
             file_names.append(file_name)
     return file_names
 
+
 def main():
     args = sys.argv[1:]
     file_args = get_args(args)
-    read_data_files(file_args)
+    dfs = read_data_files(file_args)
+    df = average_ir_signal(dfs)
+
 
 if __name__ == '__main__':
     main()
