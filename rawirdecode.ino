@@ -34,7 +34,7 @@ uint8_t currentpulse = 0; // index for pulses we're storing
 
 void setup(void) {
   Serial.begin(9600);
-  Serial.println("Ready to decode IR!");
+  Serial.println();
 }
 
 void loop(void) {
@@ -80,7 +80,7 @@ void loop(void) {
 }
 
 void printpulses(void) {
-  Serial.println("\n\r\n\rReceived: \n\rOFF, ON");
+  Serial.println();
   for (uint8_t i = 0; i < currentpulse; i++) {
     Serial.print(pulses[i][0] * RESOLUTION, DEC);
     Serial.print(", ");
