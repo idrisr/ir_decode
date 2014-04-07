@@ -18,8 +18,22 @@ def print_sysout(method):
     return printed
 
 
-def read_data_file(file_name):
-    df = pd.read_csv(file_name, skipinitialspace = True)
+def str_to_int(s, delim = ','):
+    i = s.split(delim)
+    return [int(j.strip()) for j in i]
+
+
+def str_list_to_int(l):
+    l = [str_to_int(i) for i in l]
+    return l
+
+
+def make_dataframes(splits):
+    return [make_dataframe(split) for split in splits]
+
+
+def make_dataframe(split):
+    df = pd.DataFrame(split)
     v = df.values
 
     # skip first off and last on pulse
@@ -32,9 +46,33 @@ def read_data_file(file_name):
     return df
 
 
-def read_data_files(file_args):
-    dfs = [read_data_file(file_name) for file_name in file_args]
-    return dfs
+def split_data_file(dir_file):
+    handle = open(dir_file, 'r')
+    header = 'OFF, ON'
+
+    breaks = [0]
+
+    # expects blank line between data blocks
+    for i, line in enumerate(handle):
+        if line.isspace():
+            breaks.append(i)
+
+    handle.seek(0)
+    lines = [line.rstrip() for line in handle.readlines()]
+    breaks.append(len(lines))
+
+    splits = []
+
+    for i in range(len(breaks) - 1):
+        if i == 0:
+            start = breaks[i] + 1
+        else:
+            start = breaks[i] + 2
+
+        end = breaks[i + 1]
+        splits.append((lines[start: end]))
+
+    return splits
 
 
 def average_ir_signal(dfs):
@@ -56,14 +94,12 @@ def check_file_exists(file_name):
     return os.path.isfile(file_name)
 
 
-def get_args(file_args):
-    file_names = []
-    for file_name in file_args:
-        if not check_file_exists(file_name):
-            print 'file does not exist: %s' % (file_name, )
-        else:
-            file_names.append(file_name)
-    return file_names
+def get_file_arg(file_name):
+    if not check_file_exists(file_name):
+        print 'file does not exist: %s' % (file_name, )
+        sys.exit(1)
+
+    return file_name
 
 
 @print_sysout
@@ -75,9 +111,11 @@ def make_arduino_code(df):
 
 
 def main():
-    args = sys.argv[1:]
-    file_args = get_args(args)
-    dfs = read_data_files(file_args)
+    args = sys.argv[1]
+    file_args = get_file_arg(args)
+    splits = split_data_file(file_args)
+    splits = [str_list_to_int(split) for split in splits]
+    dfs = make_dataframes(splits)
     df = average_ir_signal(dfs)
     df = normalize_ir_value(df)
     make_arduino_code(df)
