@@ -3,5 +3,5 @@
 
 
 ## Capturing IR signals
-![IR signals from serial](https://s3.amazonaws.com/octoporess_blog/github_media/ir_animation.gif "IR signals from serial")
+![IR signals from serial](https://s3.amazonaws.com/octoporess_blog/github_media/animation.gif "IR signals from serial")
 
