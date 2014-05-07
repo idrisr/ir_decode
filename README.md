@@ -5,7 +5,7 @@ The intent of this project is to easily capture InfraRed signals from a remote c
 
 * Setup Arduino and [IR sensor](http://www.adafruit.com/products/157) to capture IR signals and print them to a serial monitor
 
-* Code Arduino is running: [Arduino Sketch](rawirdecode/rawirdecode.ino)
+* Code Arduino is running: [Arduino Sketch](../blob/master/rawirdecode/rawirdecode.ino)
 ![Arduino setup](https://s3.amazonaws.com/octoporess_blog/github_media/IMG_1223.JPG =450x "Arduino setup IR receiver")
 
 
