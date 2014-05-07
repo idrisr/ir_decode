@@ -7,7 +7,7 @@ The intent of this project is to easily capture InfraRed signals from a remote c
 
 * Code Arduino is running: [Arduino Sketch](../master/rawirdecode)
  
-![Arduino setup](https://s3.amazonaws.com/octoporess_blog/github_media/IMG_1223.JPG =450x "Arduino setup IR receiver")
+![Arduino setup](https://s3.amazonaws.com/octoporess_blog/github_media/IMG_1223.JPG "Arduino setup IR receiver")
 
 
 ### 2. Capture IR Codes
